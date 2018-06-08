@@ -40,7 +40,7 @@ function main(){
 
 		if (player.z<=-400){player.z = 0; player.x = 0; player.y = 0;camera.z = player.z+170; PlayerLife -= 1; 	if (PlayerLife>-1)
 			{
-	PlayerHealth = 4
+	PlayerHealth = 4;
 				} 
 			else 
 			{player_death();}}
