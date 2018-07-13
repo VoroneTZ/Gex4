@@ -7,6 +7,10 @@
 //#include "enemy.c"
 #include "npc.c"
 
+SOUND* snd_mtlgr_big = "mtlgrbig.ogg"; 
+SOUND* snd_mtlgr_sml = "mtlgrsml.ogg"; 
+
+
 var PlayerLife = 4;
 var PlayerHealth = 4;
 var PlayerHitTimer = 0;
