@@ -253,6 +253,153 @@ action platform_Z()
 	}
 }
 
+
+action platform_Y()
+{
+	wait(1);
+
+	var startx = my.x;
+	var starty = my.y;
+	var startz;
+	var endz;
+	var vector = 3;
+	var endx = startx + my.skill1;
+	var endy = starty + my.skill2;
+		var angle;
+		var dist;
+	var tmpx;
+	var tmpy;
+	var tmpx2;
+	var tmpy2;
+	var tmpxd;
+	var tmpyd;
+
+	if (my.skill2>0)
+	{
+		starty = my.y;
+		endy = starty + my.skill2;
+	}
+	else
+	{
+		endy = my.y;
+		starty = endy + my.skill2;	
+	}
+	
+	if is(my,FLAG1){}
+	else{vector=0;}
+	
+	while(1)
+	{
+		if is(my,FLAG3)
+			{my.pan += time_step * my.skill6;}
+		
+		if (vec_dist (player.x, my.x) <  my.skill7)
+		{
+			if (my.y<=endy){vector=0;}
+			if (my.y>=starty){vector=1;}
+		}
+		
+		if is(my,FLAG2)
+		{
+			if (vector > 2)
+			{
+				if (vector ==4 && player.y<=endy){vector=1;}	
+				if (vector ==5 && player.y>=endy){vector=0;}	
+			}
+		}
+		
+		while (vector ==0) 
+		{ 	if is(my,FLAG3)
+			{
+				my.pan += my.skill6*time_step;			
+				if (vec_dist (player.x, my.x) <  my.skill7)
+				if (abs(my.z-player.z)<100)
+				{		
+					angle = atan((player.x-my.x)/(player.y-my.y));
+		
+					if ((my.y<player.y)&&(my.x>player.x)){angle =  270+(90+angle);}
+					if ((my.y>player.y)&&(my.x>player.x)){angle = 180+ angle;}
+					if ((my.y>player.y)&&(my.x<player.x)){angle = 90+ (90+angle);}
+					
+					tmpx = (player.x-my.x);
+					tmpy = (player.y-my.y);	
+					dist = vec_dist (player.x, my.x);
+					tmpx = sinv(integer(angle))*dist;
+					tmpy = cosv(integer(angle))*dist;
+					tmpx2 = sinv(integer(angle+my.skill6))*dist;
+					tmpy2 = cosv(integer(angle+my.skill6))*dist;
+					tmpxd = tmpx-tmpx2;
+					tmpyd = tmpy-tmpy2;
+				player.y +=tmpyd*time_step;
+				player.x +=tmpxd*time_step;
+				player.pan +=my.skill6*time_step;
+				}
+			}
+			if (my.y<=endy)
+			{
+				my.y +=my.skill4 * time_step;
+				if (vec_dist (player.x, my.x) <  my.skill7)
+				{
+					player.y +=my.skill4 * time_step;
+					camera.y +=my.skill4 * time_step;
+					if (my.y>=player.y-40){player.y +=40;
+					camera.y +=5;
+					}
+				} 
+				wait(1); 
+			} else 
+			{
+				if is(my,FLAG1){vector=4;} else {vector = 1;}
+				wait(-my.skill5);		
+			}
+		}	
+		while (vector ==1)
+		{	if is(my,FLAG3)
+			{
+				my.pan += my.skill6*time_step;			
+				if (vec_dist (player.x, my.x) <  my.skill7)
+				if (abs(my.z-player.z)<100)
+				{		
+					angle = atan((player.x-my.x)/(player.y-my.y));
+		
+					if ((my.y<player.y)&&(my.x>player.x)){angle =  270+(90+angle);}
+					if ((my.y>player.y)&&(my.x>player.x)){angle = 180+ angle;}
+					if ((my.y>player.y)&&(my.x<player.x)){angle = 90+ (90+angle);}
+					
+					tmpx = (player.x-my.x);
+					tmpy = (player.y-my.y);	
+					dist = vec_dist (player.x, my.x);
+					tmpx = sinv(integer(angle))*dist;
+					tmpy = cosv(integer(angle))*dist;
+					tmpx2 = sinv(integer(angle+my.skill6))*dist;
+					tmpy2 = cosv(integer(angle+my.skill6))*dist;
+					tmpxd = tmpx-tmpx2;
+					tmpyd = tmpy-tmpy2;
+				player.y +=tmpyd*time_step;
+				player.x +=tmpxd*time_step;
+				player.pan +=my.skill6*time_step;
+				}
+			}
+	
+			if (my.y>=starty)
+			{
+				my.y -=my.skill4 * time_step;
+				if (vec_dist (player.x, my.x) <  my.skill7)
+				{
+					player.y -=my.skill4 * time_step;
+					camera.y -=my.skill4 * time_step;
+				} 
+				wait(1);
+			} else 
+			{
+				if is(my,FLAG1){vector=5;} else {vector =0;}
+				wait(-my.skill5);
+			}
+		}
+		wait(1);
+	}
+}
+
 function player_hit()
 {
 	if (PlayerHitTimer==0)
