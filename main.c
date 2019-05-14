@@ -487,8 +487,8 @@ action TVlevel1()
 	media_stop(FMusic);	
 	FMusic =	media_loop("Day_of_Chaos.mp3",NULL,50);
 	fog_color = 1; 
-	camera.fog_start = 1000; 
-	camera.fog_end = 1500;
+	camera.fog_start = 1500; 
+	camera.fog_end = 2000;
 	sky_color.red = 0;
    sky_color.green = 0;
    sky_color.blue = 0; 
