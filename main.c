@@ -28,12 +28,14 @@ action ExploBonus()
  
  wait(1);	
  my.frame = 1; 
- while(1){wait (1);
- while (my.frame<7)
+ while(1)
  {
-  my.frame += 0.8*time_step;        
-  wait (1); 
-  }
+ 	wait(1);
+ 	while (my.frame<7)
+ 	{
+  		my.frame += 0.8*time_step;        
+  		wait (1); 
+   }
  my.z=-1000; 
  }
 }
@@ -41,17 +43,22 @@ action ExploBonus()
 
 action BonusCoin()
 {
-    set(my,PASSABLE); 
-my.frame = 7; // set to start frame
-    
-    while (player == NULL) {wait(1);} 
-    while (vec_dist (player.x, my.x) > 100) { 
+  set(my,PASSABLE); 
+  my.frame = 7; // set to start frame  
+  while (player == NULL) 
+  {
+  	wait(1);
+  } 
+  while (vec_dist (player.x, my.x) > 100) 
+  { 
     my.frame += 0.3*time_step; 
-         if (my.frame > 7) 
-         { 
-              my.frame = 1; // loop 
-         }  
-         wait (1);} 
+    if (my.frame > 7) 
+    { 
+      my.frame = 1; // loop 
+    }  
+    wait (1);
+  } 
+  
   PickUpCount +=1;
   Explo.x=my.x;
   Explo.y=my.y;
@@ -59,7 +66,7 @@ my.frame = 7; // set to start frame
   Explo.frame=1;
   
   wait(1);
-  ent_remove (me); 	
+  ent_remove(me); 	
 }
 
 ENTITY* ent_sky;
@@ -70,7 +77,7 @@ function player_death()
 }
 function main(){
 	camera.clip_near = 0;
-	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.1");	
+	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.2");	
 //	video_switch(12,0,2);
 	video_screen = 0;
 	video_mode = 12;
@@ -80,19 +87,28 @@ function main(){
 	level_load("md.wmb");
 	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
 	on_f1 = showConfig;
-// button_state(configPanel,1,ON); 
 	wait(2);
 	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
 	while(1)
 	{
 		wait(1);
 
-		if (player.z<=-400){player.z = 0; player.x = 0; player.y = 0;camera.z = player.z+170; PlayerLife -= 1; 	if (PlayerLife>-1)
+		if (player.z<=-400)
+		{
+			player.z = 0; 
+			player.x = 0; 
+			player.y = 0;
+			camera.z = player.z+170; 
+			PlayerLife -= 1; 	
+			if (PlayerLife>-1)
 			{
-	PlayerHealth = 4;
-				} 
+				PlayerHealth = 4;
+			} 
 			else 
-			{player_death();}}
+			{
+				player_death();
+			}
+		}
 	}
 }
 
