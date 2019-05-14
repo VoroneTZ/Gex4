@@ -1,6 +1,6 @@
-#define CAMERA_OFFSET 		480
-#define MOUSE_FACTOR		-10		// Change sign to turn in reverse direction
-#define MIN_DIF_2_MOVE		1		// Minimum angle difference to start moving
+#define CAMERA_OFFSET 		680
+#define MOUSE_FACTOR		-20		// Change sign to turn in reverse direction
+#define MIN_DIF_2_MOVE		10		// Minimum angle difference to start moving
 
 ENTITY* cameraEntity;
 ENTITY* iconEntity; 

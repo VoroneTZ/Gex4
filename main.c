@@ -7,6 +7,9 @@
 //#include "enemy.c"
 #include "npc.c"
 
+
+ENTITY* Explo;
+
 SOUND* snd_mtlgr_big = "mtlgrbig.ogg"; 
 SOUND* snd_mtlgr_sml = "mtlgrsml.ogg"; 
 
@@ -14,8 +17,50 @@ SOUND* snd_mtlgr_sml = "mtlgrsml.ogg";
 var PlayerLife = 4;
 var PlayerHealth = 4;
 var PlayerHitTimer = 0;
+var PickUpCount = 0;
 var FMusic;
 
+action ExploBonus()
+{
+	Explo = me;
+ set(my,PASSABLE); 
+ set(my, BRIGHT);
+ 
+ wait(1);	
+ my.frame = 1; 
+ while(1){wait (1);
+ while (my.frame<7)
+ {
+  my.frame += 0.8*time_step;        
+  wait (1); 
+  }
+ my.z=-1000; 
+ }
+}
+
+
+action BonusCoin()
+{
+    set(my,PASSABLE); 
+my.frame = 7; // set to start frame
+    
+    while (player == NULL) {wait(1);} 
+    while (vec_dist (player.x, my.x) > 100) { 
+    my.frame += 0.3*time_step; 
+         if (my.frame > 7) 
+         { 
+              my.frame = 1; // loop 
+         }  
+         wait (1);} 
+  PickUpCount +=1;
+  Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z;
+  Explo.frame=1;
+  
+  wait(1);
+  ent_remove (me); 	
+}
 
 ENTITY* ent_sky;
 function player_death()
@@ -470,8 +515,9 @@ PANEL* panel_hud =
 {
 	pos_x = 10;
 	pos_y = 10;
-	digits(20,20, "Life: %.0f", "Arial#20bi", 1, PlayerLife); 
+	digits(20,30, "Life: %.0f", "Arial#20bi", 1, PlayerLife); 
    digits(20,50, "Health: %.0f", "Arial#20bi", 1, PlayerHealth); 
+   digits(20,70, "Pickups: %.0f", "Arial#20bi", 1, PickUpCount); 
 	flags = SHOW | OUTLINE;
 }
 
@@ -484,6 +530,7 @@ action TVlevel1()
 	}
 	ent_remove(ent_sky);
 	level_load("l1.wmb");
+	PickUpCount = 0;
 	media_stop(FMusic);	
 	FMusic =	media_loop("Day_of_Chaos.mp3",NULL,50);
 	fog_color = 1; 
