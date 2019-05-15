@@ -37,13 +37,17 @@
 
 #define TalkingState skill40
 #define Isjump		skill41
-
+SOUND* snd_fall = "BIGFILES.DAT_00791.wav";
+SOUND* snd_jump = "BIGFILES.DAT_00790.wav";
+var snd_handle1; 
+var fallsnd;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //	Handles the gravity	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function handle_gravity(var typeMovement){
 VECTOR fromVec;
 VECTOR toVec;
+
 var downMovement;
 vec_set(fromVec, me.x);
 vec_set(toVec, me.x);
@@ -59,15 +63,20 @@ if(c_trace(fromVec,toVec,IGNORE_ME|USE_AABB)>=0){
 		my.FallVelocity  = 0;
 		my.FallDistance = 0;
 		if (!key_space){
-		my.Isjump = 0;}
+		my.Isjump = 0;
+		}
 	}
 	else
 		{
 		my.FallDistance += downMovement; 
 		my.Isjump = 2;}
+		
 	//Aquí debemos de actualizar el código de caída
-	if(my.FallDistance>=80 && normal.z <=ZNormalTolerance) //If we are falling or sliding through a non climbable angle
-		my.CurrentAction = ActionFall;
+	if(my.FallDistance>=100 && normal.z <=ZNormalTolerance) //If we are falling or sliding through a non climbable angle
+		{my.CurrentAction = ActionFall;fallsnd=1;} else {fallsnd=0;}
+	if (fallsnd==1) { 
+	if (my.Isjump == 0)
+	{fallsnd=0;snd_handle1=snd_play(snd_fall,50,0);}} 
 }
 	
 }
@@ -78,8 +87,9 @@ if(c_trace(fromVec,toVec,IGNORE_ME|USE_AABB)>=0){
 
 function jump_now()
 {
-if (me==player){
+if (me==player){	
 my.Isjump = 1;
+snd_handle1=snd_play(snd_jump,50,0);
 var vertical_force = 35; 
 var z1, z2;
 while(vertical_force > 1) //while we have some jump force left

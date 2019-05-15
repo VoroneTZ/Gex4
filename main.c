@@ -12,6 +12,11 @@ ENTITY* Explo;
 
 SOUND* snd_mtlgr_big = "mtlgrbig.ogg"; 
 SOUND* snd_mtlgr_sml = "mtlgrsml.ogg"; 
+SOUND* snd_death="c_-g3-sounds-voi.wav";
+
+SOUND* snd_pickup = "BIGFILES.DAT_00788.wav";
+
+var snd_handle; 
 
 
 var PlayerLife = 4;
@@ -19,6 +24,17 @@ var PlayerHealth = 4;
 var PlayerHitTimer = 0;
 var PickUpCount = 0;
 var FMusic;
+
+PANEL* panel_black =
+{
+  pos_x = 0; pos_y = 0;
+  size_x = 1920; size_y = 1080;
+red = 0;
+  green = 0;
+  blue = 0;
+  flags = LIGHT | SHOW | TRANSLUCENT ;
+ 
+}
 
 action ExploBonus()
 {
@@ -58,7 +74,7 @@ action BonusCoin()
     }  
     wait (1);
   } 
-  
+  snd_handle=snd_play(snd_pickup,50,0);
   PickUpCount +=1;
   Explo.x=my.x;
   Explo.y=my.y;
@@ -67,6 +83,28 @@ action BonusCoin()
   
   wait(1);
   ent_remove(me); 	
+}
+
+function fade_out()
+{
+	panel_black.alpha = 100;
+while (panel_black.alpha >1)
+{
+  panel_black.alpha -= 4*time_step; 
+  wait(1);
+}
+panel_black.alpha = 0;
+}
+
+function fade_in()
+{
+	panel_black.alpha = 0;
+while (panel_black.alpha <100)
+{
+  panel_black.alpha += 4*time_step; 
+  wait(1);
+}
+panel_black.alpha = 100;
 }
 
 ENTITY* ent_sky;
@@ -89,17 +127,28 @@ function main(){
 	on_f1 = showConfig;
 	wait(2);
 	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
+	
+	
+fade_out();
+	
+	
 	while(1)
 	{
 		wait(1);
 
 		if (player.z<=-400)
 		{
+			fade_in();
+		
+			snd_handle=snd_play(snd_death,50,0);
+			wait(-2);
+			fade_out();		
 			player.z = 0; 
 			player.x = 0; 
 			player.y = 0;
 			camera.z = player.z+170; 
 			PlayerLife -= 1; 	
+			
 			if (PlayerLife>-1)
 			{
 				PlayerHealth = 4;
@@ -545,7 +594,10 @@ action TVlevel1()
 		if (vec_dist(my.x,player.x)<=150){break;	}
 	}
 	ent_remove(ent_sky);
+	fade_in();
+	wait(-2);
 	level_load("l1.wmb");
+	fade_out();
 	PickUpCount = 0;
 	media_stop(FMusic);	
 	FMusic =	media_loop("Day_of_Chaos.mp3",NULL,50);
