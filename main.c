@@ -44,7 +44,7 @@ action ExploBonus()
 action BonusCoin()
 {
   set(my,PASSABLE); 
-  my.frame = 7; // set to start frame  
+  my.frame = my.skill1; // set to start frame  
   while (player == NULL) 
   {
   	wait(1);
@@ -52,7 +52,7 @@ action BonusCoin()
   while (vec_dist (player.x, my.x) > 100) 
   { 
     my.frame += 0.3*time_step; 
-    if (my.frame > 7) 
+    if (my.frame > my.skill1) 
     { 
       my.frame = 1; // loop 
     }  
