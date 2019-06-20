@@ -19,11 +19,21 @@ SOUND* snd_pickup = "BIGFILES.DAT_00788.wav";
 var snd_handle; 
 
 
-var PlayerLife = 4;
+var PlayerLife = 400;
 var PlayerHealth = 4;
 var PlayerHitTimer = 0;
 var PickUpCount = 0;
 var FMusic;
+
+var LevelPickups[2];
+
+function ShowLevelPickups()
+{
+	
+	if (LevelPickups[0]==1){ent_create ("red.bmp", vector(832,-93,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-93,355), NULL); }
+	if (LevelPickups[1]==1){ent_create ("red.bmp", vector(832,-186,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-186,355), NULL); }
+}
+
 
 PANEL* panel_black =
 {
@@ -113,6 +123,9 @@ function player_death()
 	printf("Game over");
 	sys_exit("666");
 }
+
+
+
 function main(){
 	camera.clip_near = 0;
 	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.2");	
@@ -122,12 +135,13 @@ function main(){
 	
 	shadow_stencil = 1;
 	mouse_mode = 4;
+	game_load("test",0);
 	level_load("md.wmb");
 	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
 	on_f1 = showConfig;
 	wait(2);
 	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
-	
+	ShowLevelPickups();
 	
 fade_out();
 	
@@ -593,15 +607,123 @@ action TVlevel1()
 		wait(-1);
 		if (vec_dist(my.x,player.x)<=150){break;	}
 	}
-	ent_remove(ent_sky);
+	
 	fade_in();
+	
 	wait(-2);
+	ent_remove(ent_sky);
 	level_load("l1.wmb");
 	fade_out();
 	PickUpCount = 0;
 	media_stop(FMusic);	
 	FMusic =	media_loop("Day_of_Chaos.mp3",NULL,50);
 	fog_color = 1; 
+	camera.fog_start = 1500; 
+	camera.fog_end = 2000;
+	sky_color.red = 0;
+   sky_color.green = 0;
+   sky_color.blue = 0; 
+}
+
+action LevelPickup1()
+{
+	if (LevelPickups[0] == 1){set(my,TRANSLUCENT); my.alpha=50;}
+	var LDirection=0;
+	var LCount=0;
+	 set(my,PASSABLE); 
+	while (player == NULL) 
+  {
+  	wait(1);
+  } 
+  while (vec_dist (player.x, my.x) > 100) 
+  { 
+    if (LDirection==0)
+    {
+    	LCount = LCount +0.1;
+    	my.z=my.z+0.1;
+    	if (LCount>25){LDirection=1;LCount=0;}
+    	
+    }
+    if (LDirection==1)
+    {
+    	LCount = LCount +0.1;
+    	my.z=my.z-0.1;
+    	if (LCount>25){LDirection=0;LCount=0;}	
+    	
+    }
+
+    wait (1);
+  } 
+	LevelPickups[0] = 1;
+	
+	fade_in();
+	
+	wait(-2);
+	//ent_remove(ent_sky);
+	level_load("md.wmb");
+	game_save("test",0,SV_VARS);
+	PickUpCount = 0;
+	media_stop(FMusic);	
+	
+	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
+	wait(2);
+	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
+	ShowLevelPickups();
+	fade_out();
+	fog_color = 0; 	
+	camera.fog_start = 1500; 
+	camera.fog_end = 2000;
+	sky_color.red = 0;
+   sky_color.green = 0;
+   sky_color.blue = 0; 
+}
+
+action LevelPickup2()
+{
+		if (LevelPickups[1] == 1){set(my,TRANSLUCENT); my.alpha=50;}
+	var LDirection=0;
+	var LCount=0;
+	 set(my,PASSABLE); 
+	while (player == NULL) 
+  {
+  	wait(1);
+  } 
+  while (vec_dist (player.x, my.x) > 100) 
+  { 
+    if (LDirection==0)
+    {
+    	LCount = LCount +0.1;
+    	my.z=my.z+0.1;
+    	if (LCount>25){LDirection=1;LCount=0;}
+    	
+    }
+    if (LDirection==1)
+    {
+    	LCount = LCount +0.1;
+    	my.z=my.z-0.1;
+    	if (LCount>25){LDirection=0;LCount=0;}	
+    	
+    }
+
+    wait (1);
+  } 
+	LevelPickups[1] = 1;
+	
+	fade_in();
+	
+	wait(-2);
+	//ent_remove(ent_sky);
+	level_load("md.wmb");
+	
+	PickUpCount = 0;
+	media_stop(FMusic);	
+	game_save("test",0,SV_VARS);
+	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
+	wait(2);
+	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
+	ShowLevelPickups();
+	fade_out();
+	fog_color = 0; 	
 	camera.fog_start = 1500; 
 	camera.fog_end = 2000;
 	sky_color.red = 0;
