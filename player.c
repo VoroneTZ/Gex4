@@ -4,7 +4,9 @@
 
 ENTITY* cameraEntity;
 ENTITY* iconEntity; 
-var CAMERA_OFFSET =		680;
+var CAMERA_OFFSET =		380;
+var farc=0;
+var FCarc=80;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //	Handles the camera movement, we will position the camera CAMERA_OFFSET quants away
@@ -27,7 +29,7 @@ function updateCamera(var currCameraHeight){
 	  if (currCameraHeight<80){currCameraHeight +=10* time_step;}
 	  if (currCameraHeight>200){currCameraHeight -=10* time_step;}	
 	}
-	tempVect.z = clamp(currCameraHeight, -CAMERA_OFFSET, CAMERA_OFFSET);
+	tempVect.z = clamp(currCameraHeight, -CAMERA_OFFSET*2, CAMERA_OFFSET*2);
 	//	Rotate with mouse movement
 	vec_rotateaxis(tempVect, vector(0,0,1), mouse_force.x * MOUSE_FACTOR * time_step) ;
 	vec_rotateaxis(tempVect, vector(0,0,1), -key_q  * 8 * time_step) ;
@@ -54,7 +56,12 @@ function updateCamera2(var currCameraHeight){
 	vec_normalize(tempVect,CAMERA_OFFSET);		//	it should be CAMERA_OFFSET quants away
 	//	adjust height
 	currCameraHeight += mouse_force.y * MOUSE_FACTOR * time_step;
-	tempVect.z = clamp(currCameraHeight, -CAMERA_OFFSET, CAMERA_OFFSET);
+		if (key_a || key_s || key_d ||key_w)
+	{
+	  if (currCameraHeight<80){currCameraHeight +=10* time_step;}
+	  if (currCameraHeight>200){currCameraHeight -=10* time_step;}	
+	}
+	tempVect.z = clamp(currCameraHeight, -CAMERA_OFFSET*2, CAMERA_OFFSET*2);
 	//	Rotate with mouse movement
 	vec_rotateaxis(tempVect, vector(0,0,1), mouse_force.x * MOUSE_FACTOR * time_step) ;
 	vec_rotateaxis(tempVect, vector(0,0,1), key_q * 8 * time_step) ;
@@ -86,6 +93,8 @@ function updateInput(){
 	if(key_cur || key_d) me.MovementAction += mTurnLeft;
 	if(key_1)CAMERA_OFFSET = CAMERA_OFFSET+1;
 	if(key_2)CAMERA_OFFSET = CAMERA_OFFSET-1;
+	if(key_5)FCarc = FCarc+1;
+	if(key_6)FCarc = FCarc-1;
 	if(key_3)cameraType = 1;
 	if(key_4)cameraType = 2;
 
@@ -94,6 +103,7 @@ function updateInput(){
 //	Get update actions
 /////////////////////////////////////////////////////////////////////////////////////////
 function updateActions(){
+	camera.arc +=farc;
 	float displacement=0;
 	if (me.MovementAction == 1 || 
 		me.MovementAction == 2 || 
@@ -103,7 +113,7 @@ function updateActions(){
 		me.MovementAction == 8 || 
 		me.MovementAction == 9 || 
 		me.MovementAction == 10) {
-
+	if (farc<2){farc +=1*time_step;}
 		//	Get vector from player to camera
 		VECTOR tempVector;
 		vec_diff(tempVector,camera.x, my.x);
@@ -152,6 +162,7 @@ function updateActions(){
 		}
 	}
 	else{
+			if (farc>0){farc -=1*time_step;}
 		me.CurrentAction = ActionIdle;	
 	}
 	//	Move the player
@@ -208,7 +219,11 @@ action player_action() {
 	
 		updateInput();
 		currCameraHeight = camera.z - my.z;
+		camera.arc= FCarc + abs(camera.z-player.z)/100;
 		updateActions();	
+		
+		
+		
 		if(cameraType == 1)
 			updateCamera2(currCameraHeight);
 		else

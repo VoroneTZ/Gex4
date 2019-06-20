@@ -138,7 +138,7 @@ function main(){
 	game_load("test",0);
 	level_load("md.wmb");
 	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
-
+	camera.arc= 80;
 	wait(2);
 	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
 	ShowLevelPickups();
