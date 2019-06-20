@@ -1,9 +1,10 @@
-#define CAMERA_OFFSET 		680
+
 #define MOUSE_FACTOR		-20		// Change sign to turn in reverse direction
 #define MIN_DIF_2_MOVE		10		// Minimum angle difference to start moving
 
 ENTITY* cameraEntity;
 ENTITY* iconEntity; 
+var CAMERA_OFFSET =		680;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //	Handles the camera movement, we will position the camera CAMERA_OFFSET quants away
@@ -83,6 +84,10 @@ function updateInput(){
 	if(key_cud || key_s) me.MovementAction += mBackward; 
 	if(key_cul || key_a) me.MovementAction += mTurnRight; 
 	if(key_cur || key_d) me.MovementAction += mTurnLeft;
+	if(key_1)CAMERA_OFFSET = CAMERA_OFFSET+1;
+	if(key_2)CAMERA_OFFSET = CAMERA_OFFSET-1;
+	if(key_3)cameraType = 1;
+	if(key_4)cameraType = 2;
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -204,10 +209,10 @@ action player_action() {
 		updateInput();
 		currCameraHeight = camera.z - my.z;
 		updateActions();	
-		if(cameraType == CAMERA_SCAN)
-			updateCamera(currCameraHeight);
-		else
+		if(cameraType == 1)
 			updateCamera2(currCameraHeight);
+		else
+			updateCamera(currCameraHeight);
 		wait(1);
 		
 	}

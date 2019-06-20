@@ -57,7 +57,7 @@ if(c_trace(fromVec,toVec,IGNORE_ME|USE_AABB)>=0){
 		if(trace_hit==1 && (normal.z >= ZNormalTolerance && normal.z <1)){
 			typeMovement &= ~GLIDE;					
 		}																							
-	my.FallVelocity += (my.GravityAccel * time_step)/4;
+	my.FallVelocity += (my.GravityAccel)*(time_step);
 	downMovement = c_move(me,vector(0,0,-my.FallVelocity),NULL,typeMovement);
 	if(downMovement<=0){
 		my.FallVelocity  = 0;

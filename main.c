@@ -130,7 +130,7 @@ function main(){
 	camera.clip_near = 0;
 	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.2");	
 //	video_switch(12,0,2);
-	video_screen = 0;
+	video_screen = 1;
 	video_mode = 12;
 	
 	shadow_stencil = 1;
@@ -138,7 +138,7 @@ function main(){
 	game_load("test",0);
 	level_load("md.wmb");
 	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
-	on_f1 = showConfig;
+
 	wait(2);
 	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
 	ShowLevelPickups();
