@@ -12,6 +12,7 @@
 #define ActionFall		4
 #define ActionTalk		5
 #define ActionJump		6
+#define ActionAttack    7
 
 
 #define WaitingTalk			1
@@ -37,10 +38,42 @@
 
 #define TalkingState skill40
 #define Isjump		skill41
+#define IsAttack		skill42
+#define hp skill43
 SOUND* snd_fall = "BIGFILES.DAT_00791.wav";
 SOUND* snd_jump = "BIGFILES.DAT_00790.wav";
+SOUND* snd_player_hit="BIGFILES.DAT_00796.wav";
+SOUND* snd_death_enemy="BIGFILES.DAT_00792.wav";
+SOUND* snd_player_hit_enemy="BIGFILES.DAT_00800.wav";
 var snd_handle1; 
 var fallsnd;
+var isAttack=0;
+
+
+
+ENTITY* Explo;
+
+
+action ExploBonus()
+{
+	Explo = me;
+ set(my,PASSABLE); 
+ set(my, BRIGHT);
+ 
+ wait(1);	
+ my.frame = 1; 
+ while(1)
+ {
+ 	wait(1);
+ 	while (my.frame<7)
+ 	{
+  		my.frame += 0.8*time_step;        
+  		wait (1); 
+   }
+ my.z=-1000; 
+ }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //	Handles the gravity	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,6 +118,22 @@ if(c_trace(fromVec,toVec,IGNORE_ME|USE_AABB)>=0){
 //	Handles entities movement
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function Attack_now()
+{
+	if (me==player && me.IsAttack==0){
+my.IsAttack = 1;
+snd_handle1=snd_play(snd_player_hit,50,0);
+while (my.AnimationPercent < 90)
+   {
+   	my.CurrentAction=ActionAttack;
+		wait(1);	
+	}
+	my.IsAttack = 3;
+	while (key_alt || mouse_left){wait(3);}
+	
+	my.IsAttack = 0;}
+}
+
 function jump_now()
 {
 if (me==player){	
@@ -114,11 +163,19 @@ if(vec_length(displace)!=0){
 		typeGravity &= ~GLIDE;					
 	}													
 }
+
+	if(key_alt || mouse_left){Attack_now();}
+
+
 if (my.Isjump != 1){
 handle_gravity(typeGravity);
-if (key_space && my.Isjump ==0){
-	jump_now();
-} 
+if (key_space || mouse_right)
+	{
+	if (my.Isjump ==0)
+		{
+		jump_now();
+		} 		
+	}
 }
 }
 
@@ -135,6 +192,7 @@ var blendFactor;
 var animStart = 0;
 var animEnd = 100;
 var animType = ANM_CYCLE;
+
 switch(me.CurrentAction){
 	case ActionIdle: 
 		animationName = "default";
@@ -147,6 +205,7 @@ switch(me.CurrentAction){
 	case ActionWalk: 
 		animationName = "run";
 		animFactor = 5;
+
 	//	break;
 	case ActionFall: 
 		animationName = "falling";
@@ -154,6 +213,10 @@ switch(me.CurrentAction){
 		animType = 0;
 	//	break;
 }
+	if (my.IsAttack==1)
+	{	
+		animationName = "attack";
+		animFactor = 20;	}
 
 if (my.Isjump == 1) {
 	animationName = "jump";

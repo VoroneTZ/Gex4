@@ -8,11 +8,13 @@
 #include "npc.c"
 
 
-ENTITY* Explo;
+
 
 SOUND* snd_mtlgr_big = "mtlgrbig.ogg"; 
 SOUND* snd_mtlgr_sml = "mtlgrsml.ogg"; 
 SOUND* snd_death="c_-g3-sounds-voi.wav";
+SOUND* snd_death_enemy="BIGFILES.DAT_00792.wav";
+SOUND* snd_player_hit_enemy="BIGFILES.DAT_00800.wav";
 
 SOUND* snd_pickup = "BIGFILES.DAT_00788.wav";
 
@@ -26,12 +28,16 @@ var PickUpCount = 0;
 var FMusic;
 
 var LevelPickups[2];
+var LevelBonusPickups[2];
 
 function ShowLevelPickups()
 {
 	
 	if (LevelPickups[0]==1){ent_create ("red.bmp", vector(832,-93,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-93,355), NULL); }
 	if (LevelPickups[1]==1){ent_create ("red.bmp", vector(832,-186,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-186,355), NULL); }
+	
+	if (LevelBonusPickups[0]==1){ent_create ("wite.bmp", vector(832,-93,451), NULL); }else{ent_create ("whiteBlank.bmp", vector(832,-93,451), NULL); }
+	if (LevelBonusPickups[1]==1){ent_create ("wite.bmp", vector(832,-186,451), NULL); }else{ent_create ("whiteBlank.bmp", vector(832,-186,451), NULL); }
 }
 
 
@@ -44,26 +50,6 @@ red = 0;
   blue = 0;
   flags = LIGHT | SHOW | TRANSLUCENT ;
  
-}
-
-action ExploBonus()
-{
-	Explo = me;
- set(my,PASSABLE); 
- set(my, BRIGHT);
- 
- wait(1);	
- my.frame = 1; 
- while(1)
- {
- 	wait(1);
- 	while (my.frame<7)
- 	{
-  		my.frame += 0.8*time_step;        
-  		wait (1); 
-   }
- my.z=-1000; 
- }
 }
 
 
@@ -128,14 +114,14 @@ function player_death()
 
 function main(){
 	camera.clip_near = 0;
-	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.2");	
+	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.3");	
 //	video_switch(12,0,2);
 	video_screen = 1;
 	video_mode = 12;
 	
 	shadow_stencil = 1;
 	mouse_mode = 4;
-	game_load("test",0);
+	if (game_load("test",0)<=0){game_save("test",0,SV_VARS);}
 	level_load("md.wmb");
 	ent_sky = ent_createlayer("spacecube1+6.bmp", SKY | CUBE, 1);  
 	camera.arc= 80;
@@ -586,8 +572,64 @@ action EnemyLine()
       }
       
       wait(1);
-      
+      if (my.skill1>50 || my.skill1<10){ 
+      if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){break;}}	}
    }
+   snd_handle=snd_play(snd_player_hit_enemy,50,0);
+    Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z+30;
+  Explo.frame=1;
+  snd_handle=snd_play(snd_death_enemy,50,0);
+  wait(1);
+  my.z = -1000;
+  while (PlayerHitTimer>0) {wait(-1);}
+  ent_remove(me); 
+}
+
+
+action EnemyLineY()
+{
+	var starty = my.y;
+	var endy= my.y+my.skill1;
+	var temp[3];
+   set(my,SHADOW|CAST);
+   wait(-1);
+   while(1)
+   {
+   	if (player.y>starty && player.y<endy)
+   	{
+   		my.y=player.y;
+   	}
+     	vec_set(temp,player.x); 
+      vec_sub(temp,my.x);
+      vec_to_angle(my.pan,temp); 
+    	my.tilt=0;
+   	my.roll=0;
+      
+		my.skill1 += 3*time_step;
+      if (my.skill1 > 100) my.skill1 -= 100; 
+      ent_animate(me,"walk",my.skill1,ANM_CYCLE);
+      
+      if (vec_dist(my.x,player.x)< 90)
+      {
+      	player_hit();
+      }
+      
+      wait(1);
+      if (my.skill1>50 || my.skill1<10){ 
+      if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){break;}}	}
+   }
+   snd_handle=snd_play(snd_player_hit_enemy,50,0);
+    Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z+30;
+  Explo.frame=1;
+  snd_handle=snd_play(snd_death_enemy,50,0);
+  wait(1);
+   my.z = -1000;
+  while (PlayerHitTimer>0) {wait(-1);}
+  ent_remove(me); 
 }
 
 PANEL* panel_hud =
@@ -625,9 +667,51 @@ action TVlevel1()
    sky_color.blue = 0; 
 }
 
+action LevelBonusPickup1()
+{
+	if (LevelBonusPickups[1] == 1){set(my,TRANSLUCENT); my.alpha=50;}
+		var LDirection=0;
+	var LCount=0;
+	 set(my,PASSABLE); 
+	while (player == NULL) 
+  {
+  	wait(1);
+  } 
+  while (vec_dist (player.x, my.x) > 100) 
+  { 
+    if (LDirection==0)
+    {
+    	LCount = LCount +0.1;
+    	my.z=my.z+0.1;
+    	if (LCount>25){LDirection=1;LCount=0;}
+    	
+    }
+    if (LDirection==1)
+    {
+    	LCount = LCount +0.1;
+    	my.z=my.z-0.1;
+    	if (LCount>25){LDirection=0;LCount=0;}	
+    	
+    }
+
+    wait (2);
+  } 
+		LevelBonusPickups[1] = 1;
+	  snd_handle=snd_play(snd_pickup,50,0);
+  Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z;
+  Explo.frame=1;
+  
+  wait(1);
+  ent_remove(me); 
+}
+
 action LevelPickup1()
 {
 	if (LevelPickups[0] == 1){set(my,TRANSLUCENT); my.alpha=50;}
+	
+	
 	var LDirection=0;
 	var LCount=0;
 	 set(my,PASSABLE); 
@@ -652,10 +736,19 @@ action LevelPickup1()
     	
     }
 
-    wait (1);
+    wait (2);
   } 
 	LevelPickups[0] = 1;
+	if (PickUpCount==56){LevelBonusPickups[0]=1;}
 	
+	  snd_handle=snd_play(snd_pickup,50,0);
+
+  Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z;
+  Explo.frame=1;
+  
+  
 	fade_in();
 	
 	wait(-2);
@@ -680,7 +773,8 @@ action LevelPickup1()
 
 action LevelPickup2()
 {
-		if (LevelPickups[1] == 1){set(my,TRANSLUCENT); my.alpha=50;}
+	
+	if (LevelPickups[1] == 1){set(my,TRANSLUCENT); my.alpha=50;}
 	var LDirection=0;
 	var LCount=0;
 	 set(my,PASSABLE); 
@@ -705,10 +799,19 @@ action LevelPickup2()
     	
     }
 
-    wait (1);
+    wait (2);
   } 
 	LevelPickups[1] = 1;
 	
+				if (PickUpCount==56){LevelBonusPickups[0]=1;}
+				
+					  snd_handle=snd_play(snd_pickup,50,0);
+
+  Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z;
+  Explo.frame=1;
+  
 	fade_in();
 	
 	wait(-2);

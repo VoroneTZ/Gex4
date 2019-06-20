@@ -1,4 +1,4 @@
-
+#include "animation.c"
 function npc_movement(var* pathDist){
 	VECTOR vDir;
 	VECTOR newPosition;
@@ -46,6 +46,7 @@ function npc_event(){
 action npc_action(){
 	//	Adjust collision parameters
 	wait(1);	
+	my.hp=1;
 	my.eflags |= FAT;
 	my.SizeOffset = 56;
 	my.RadiusSize = 28;
@@ -62,11 +63,27 @@ action npc_action(){
 
 	set(my,SHADOW|CAST);
 	
-	while(1) {
+	while(my.hp>0) {
 		if(!npc_talk())
-			//my.CurrentAction = ActionIdle;
+			my.CurrentAction = ActionIdle;
 			npc_movement(pathDist);
 		handle_animation();
+		if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){my.hp -=1; wait(1);}}	
 		wait(1);
 	}
+	my.skill1=0;
+	snd_handle1=snd_play(snd_player_hit_enemy,50,0);
+ while(my.skill1<90) 
+   {
+      my.skill1 += 3*time_step;
+      if (my.skill1 > 100) my.skill1 -= 100; 
+      ent_animate(me,"death",my.skill1,ANM_CYCLE);
+      wait(1);
+   }
+snd_handle1=snd_play(snd_death_enemy,50,0);
+    Explo.x=my.x;
+  Explo.y=my.y;
+  Explo.z=my.z+30;
+  Explo.frame=1;
+  ent_remove(me); 
 }
