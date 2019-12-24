@@ -33,74 +33,74 @@ var LevelBonusPickups[2];
 function ShowLevelPickups()
 {
 	
-	if (LevelPickups[0]==1){ent_create ("red.bmp", vector(832,-93,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-93,355), NULL); }
-	if (LevelPickups[1]==1){ent_create ("red.bmp", vector(832,-186,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-186,355), NULL); }
+if (LevelPickups[0]==1){ent_create ("red.bmp", vector(832,-93,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-93,355), NULL); }
+if (LevelPickups[1]==1){ent_create ("red.bmp", vector(832,-186,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-186,355), NULL); }
 	
-	if (LevelBonusPickups[0]==1){ent_create ("wite.bmp", vector(832,-93,451), NULL); }else{ent_create ("whiteblank.bmp", vector(832,-93,451), NULL); }
-	if (LevelBonusPickups[1]==1){ent_create ("wite.bmp", vector(832,-186,451), NULL); }else{ent_create ("whiteblank.bmp", vector(832,-186,451), NULL); }
+if (LevelBonusPickups[0]==1){ent_create ("wite.bmp", vector(832,-93,451), NULL); }else{ent_create ("whiteblank.bmp", vector(832,-93,451), NULL); }
+if (LevelBonusPickups[1]==1){ent_create ("wite.bmp", vector(832,-186,451), NULL); }else{ent_create ("whiteblank.bmp", vector(832,-186,451), NULL); }
 }
 
 
 PANEL* panel_black =
 {
-  pos_x = 0; pos_y = 0;
-  size_x = 1920; size_y = 1080;
-red = 0;
-  green = 0;
-  blue = 0;
-  flags = LIGHT | SHOW | TRANSLUCENT ;
- 
+	pos_x = 0; pos_y = 0;
+	size_x = 1920; size_y = 1080;
+	red = 0;
+	green = 0;
+	blue = 0;
+	flags = LIGHT | SHOW | TRANSLUCENT ;
+	
 }
 
 
 action BonusCoin()
 {
-  set(my,PASSABLE); 
-  my.frame = my.skill1; // set to start frame  
-  while (player == NULL) 
-  {
-  	wait(1);
-  } 
-  while (vec_dist (player.x, my.x) > 100) 
-  { 
-    my.frame += 0.3*time_step; 
-    if (my.frame > my.skill1) 
-    { 
-      my.frame = 1; // loop 
-    }  
-    wait (1);
-  } 
-  snd_handle=snd_play(snd_pickup,50,0);
-  PickUpCount +=1;
-  Explo.x=my.x;
-  Explo.y=my.y;
-  Explo.z=my.z;
-  Explo.frame=1;
-  
-  wait(1);
-  ent_remove(me); 	
+	set(my,PASSABLE); 
+	my.frame = my.skill1; // set to start frame  
+	while (player == NULL) 
+	{
+		wait(1);
+	} 
+	while (vec_dist (player.x, my.x) > 100) 
+	{ 
+		my.frame += 0.3*time_step; 
+		if (my.frame > my.skill1) 
+		{ 
+			my.frame = 1; // loop 
+		}  
+		wait (1);
+	} 
+	snd_handle=snd_play(snd_pickup,50,0);
+	PickUpCount +=1;
+	Explo.x=my.x;
+	Explo.y=my.y;
+	Explo.z=my.z;
+	Explo.frame=1;
+	
+	wait(1);
+	ent_remove(me); 	
 }
 
 function fade_out()
 {
 	panel_black.alpha = 100;
-while (panel_black.alpha >1)
-{
-  panel_black.alpha -= 4*time_step; 
-  wait(1);
-}
-panel_black.alpha = 0;
+	while (panel_black.alpha >1)
+	{
+		panel_black.alpha -= 4*time_step; 
+		wait(1);
+	}
+	panel_black.alpha = 0;
 }
 
 function fade_in()
 {
 	panel_black.alpha = 0;
-while (panel_black.alpha <100)
-{
-  panel_black.alpha += 4*time_step; 
-  wait(1);
-}
-panel_black.alpha = 100;
+	while (panel_black.alpha <100)
+	{
+		panel_black.alpha += 4*time_step; 
+		wait(1);
+	}
+	panel_black.alpha = 100;
 }
 
 ENTITY* ent_sky;
@@ -115,8 +115,8 @@ function player_death()
 function main(){
 	camera.clip_near = 0;
 	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.3");	
-//	video_switch(12,0,2);
-	video_screen = 1;
+	//	video_switch(12,0,2);
+	video_screen = 0;
 	video_mode = 12;
 	
 	shadow_stencil = 1;
@@ -129,7 +129,7 @@ function main(){
 	FMusic =	media_loop("Echoes_of_Time.mp3",NULL,50);
 	ShowLevelPickups();
 	
-fade_out();
+	fade_out();
 	
 	
 	while(1)
@@ -139,7 +139,7 @@ fade_out();
 		if (player.z<=-400)
 		{
 			fade_in();
-		
+			
 			snd_handle=snd_play(snd_death,50,0);
 			wait(-2);
 			fade_out();		
@@ -170,7 +170,7 @@ action platform_pan()
 {
 	wait(1);
 	var angle;
-		var dist;
+	var dist;
 	var tmpx;
 	var tmpy;
 	var tmpx2;
@@ -199,11 +199,11 @@ action platform_pan()
 			tmpy2 = cosv(integer(angle+my.skill1))*dist;
 			tmpxd = tmpx-tmpx2;
 			tmpyd = tmpy-tmpy2;
-		player.y +=tmpyd*time_step;
-		player.x +=tmpxd*time_step;
-		player.pan +=my.skill1*time_step;
+			player.y +=tmpyd*time_step;
+			player.x +=tmpxd*time_step;
+			player.pan +=my.skill1*time_step;
 		}
-			wait(1);
+		wait(1);
 	}
 }
 
@@ -228,8 +228,8 @@ action platform_Z()
 	var vector = 3;
 	var endx = startx + my.skill1;
 	var endy = starty + my.skill2;
-		var angle;
-		var dist;
+	var angle;
+	var dist;
 	var tmpx;
 	var tmpy;
 	var tmpx2;
@@ -254,7 +254,7 @@ action platform_Z()
 	while(1)
 	{
 		if is(my,FLAG3)
-			{my.pan += time_step * my.skill6;}
+		{my.pan += time_step * my.skill6;}
 		
 		if (vec_dist (player.x, my.x) <  my.skill7)
 		{
@@ -279,7 +279,7 @@ action platform_Z()
 				if (abs(my.z-player.z)<100)
 				{		
 					angle = atan((player.x-my.x)/(player.y-my.y));
-		
+					
 					if ((my.y<player.y)&&(my.x>player.x)){angle =  270+(90+angle);}
 					if ((my.y>player.y)&&(my.x>player.x)){angle = 180+ angle;}
 					if ((my.y>player.y)&&(my.x<player.x)){angle = 90+ (90+angle);}
@@ -293,9 +293,9 @@ action platform_Z()
 					tmpy2 = cosv(integer(angle+my.skill6))*dist;
 					tmpxd = tmpx-tmpx2;
 					tmpyd = tmpy-tmpy2;
-				player.y +=tmpyd*time_step;
-				player.x +=tmpxd*time_step;
-				player.pan +=my.skill6*time_step;
+					player.y +=tmpyd*time_step;
+					player.x +=tmpxd*time_step;
+					player.pan +=my.skill6*time_step;
 				}
 			}
 			if (my.z<=endz)
@@ -306,13 +306,13 @@ action platform_Z()
 					player.z +=my.skill4 * time_step;
 					camera.z +=my.skill4 * time_step;
 					if (my.z>=player.z-40){player.z +=40;
-					camera.z +=5;
+						camera.z +=5;
 					}
 				} 
 				wait(1); 
 			} else 
 			{
-				if is(my,FLAG1){vector=4;} else {vector = 1;}
+			if is(my,FLAG1){vector=4;} else {vector = 1;}
 				wait(-my.skill5);		
 			}
 		}	
@@ -324,7 +324,7 @@ action platform_Z()
 				if (abs(my.z-player.z)<100)
 				{		
 					angle = atan((player.x-my.x)/(player.y-my.y));
-		
+					
 					if ((my.y<player.y)&&(my.x>player.x)){angle =  270+(90+angle);}
 					if ((my.y>player.y)&&(my.x>player.x)){angle = 180+ angle;}
 					if ((my.y>player.y)&&(my.x<player.x)){angle = 90+ (90+angle);}
@@ -338,12 +338,12 @@ action platform_Z()
 					tmpy2 = cosv(integer(angle+my.skill6))*dist;
 					tmpxd = tmpx-tmpx2;
 					tmpyd = tmpy-tmpy2;
-				player.y +=tmpyd*time_step;
-				player.x +=tmpxd*time_step;
-				player.pan +=my.skill6*time_step;
+					player.y +=tmpyd*time_step;
+					player.x +=tmpxd*time_step;
+					player.pan +=my.skill6*time_step;
 				}
 			}
-	
+			
 			if (my.z>=startz)
 			{
 				my.z -=my.skill4 * time_step;
@@ -355,7 +355,7 @@ action platform_Z()
 				wait(1);
 			} else 
 			{
-				if is(my,FLAG1){vector=5;} else {vector =0;}
+			if is(my,FLAG1){vector=5;} else {vector =0;}
 				wait(-my.skill5);
 			}
 		}
@@ -375,8 +375,8 @@ action platform_Y()
 	var vector = 3;
 	var endx = startx + my.skill1;
 	var endy = starty + my.skill2;
-		var angle;
-		var dist;
+	var angle;
+	var dist;
 	var tmpx;
 	var tmpy;
 	var tmpx2;
@@ -401,7 +401,7 @@ action platform_Y()
 	while(1)
 	{
 		if is(my,FLAG3)
-			{my.pan += time_step * my.skill6;}
+		{my.pan += time_step * my.skill6;}
 		
 		if (vec_dist (player.x, my.x) <  my.skill7)
 		{
@@ -426,7 +426,7 @@ action platform_Y()
 				if (abs(my.z-player.z)<100)
 				{		
 					angle = atan((player.x-my.x)/(player.y-my.y));
-		
+					
 					if ((my.y<player.y)&&(my.x>player.x)){angle =  270+(90+angle);}
 					if ((my.y>player.y)&&(my.x>player.x)){angle = 180+ angle;}
 					if ((my.y>player.y)&&(my.x<player.x)){angle = 90+ (90+angle);}
@@ -440,9 +440,9 @@ action platform_Y()
 					tmpy2 = cosv(integer(angle+my.skill6))*dist;
 					tmpxd = tmpx-tmpx2;
 					tmpyd = tmpy-tmpy2;
-				player.y +=tmpyd*time_step;
-				player.x +=tmpxd*time_step;
-				player.pan +=my.skill6*time_step;
+					player.y +=tmpyd*time_step;
+					player.x +=tmpxd*time_step;
+					player.pan +=my.skill6*time_step;
 				}
 			}
 			if (my.y<=endy)
@@ -453,13 +453,13 @@ action platform_Y()
 					player.y +=my.skill4 * time_step;
 					camera.y +=my.skill4 * time_step;
 					if (my.y>=player.y-40){player.y +=40;
-					camera.y +=5;
+						camera.y +=5;
 					}
 				} 
 				wait(1); 
 			} else 
 			{
-				if is(my,FLAG1){vector=4;} else {vector = 1;}
+			if is(my,FLAG1){vector=4;} else {vector = 1;}
 				wait(-my.skill5);		
 			}
 		}	
@@ -471,7 +471,7 @@ action platform_Y()
 				if (abs(my.z-player.z)<100)
 				{		
 					angle = atan((player.x-my.x)/(player.y-my.y));
-		
+					
 					if ((my.y<player.y)&&(my.x>player.x)){angle =  270+(90+angle);}
 					if ((my.y>player.y)&&(my.x>player.x)){angle = 180+ angle;}
 					if ((my.y>player.y)&&(my.x<player.x)){angle = 90+ (90+angle);}
@@ -485,12 +485,12 @@ action platform_Y()
 					tmpy2 = cosv(integer(angle+my.skill6))*dist;
 					tmpxd = tmpx-tmpx2;
 					tmpyd = tmpy-tmpy2;
-				player.y +=tmpyd*time_step;
-				player.x +=tmpxd*time_step;
-				player.pan +=my.skill6*time_step;
+					player.y +=tmpyd*time_step;
+					player.x +=tmpxd*time_step;
+					player.pan +=my.skill6*time_step;
 				}
 			}
-	
+			
 			if (my.y>=starty)
 			{
 				my.y -=my.skill4 * time_step;
@@ -502,7 +502,7 @@ action platform_Y()
 				wait(1);
 			} else 
 			{
-				if is(my,FLAG1){vector=5;} else {vector =0;}
+			if is(my,FLAG1){vector=5;} else {vector =0;}
 				wait(-my.skill5);
 			}
 		}
@@ -525,7 +525,7 @@ function player_hit()
 				player.x = 0;
 				player.y = 0;
 				player.z = 0;
-				} 
+			} 
 			else 
 			{player_death();}
 		}
@@ -548,43 +548,43 @@ action EnemyLine()
 	var startx = my.x;
 	var endx= my.x+my.skill1;
 	var temp[3];
-   set(my,SHADOW|CAST);
-   wait(-1);
-   while(1)
-   {
-   	if (player.x>startx && player.x<endx)
-   	{
-   		my.x=player.x;
-   	}
-     	vec_set(temp,player.x); 
-      vec_sub(temp,my.x);
-      vec_to_angle(my.pan,temp); 
-    	my.tilt=0;
-   	my.roll=0;
-      
+	set(my,SHADOW|CAST);
+	wait(-1);
+	while(1)
+	{
+		if (player.x>startx && player.x<endx)
+		{
+			my.x=player.x;
+		}
+		vec_set(temp,player.x); 
+		vec_sub(temp,my.x);
+		vec_to_angle(my.pan,temp); 
+		my.tilt=0;
+		my.roll=0;
+		
 		my.skill1 += 3*time_step;
-      if (my.skill1 > 100) my.skill1 -= 100; 
-      ent_animate(me,"walk",my.skill1,ANM_CYCLE);
-      
-      if (vec_dist(my.x,player.x)< 90)
-      {
-      	player_hit();
-      }
-      
-      wait(1);
-      if (my.skill1>50 || my.skill1<10){ 
-      if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){break;}}	}
-   }
-   snd_handle=snd_play(snd_player_hit_enemy,50,0);
-    Explo.x=my.x;
-  Explo.y=my.y;
-  Explo.z=my.z+30;
-  Explo.frame=1;
-  snd_handle=snd_play(snd_death_enemy,50,0);
-  wait(1);
-  my.z = -1000;
-  while (PlayerHitTimer>0) {wait(-1);}
-  ent_remove(me); 
+		if (my.skill1 > 100) my.skill1 -= 100; 
+		ent_animate(me,"walk",my.skill1,ANM_CYCLE);
+		
+		if (vec_dist(my.x,player.x)< 90)
+		{
+			player_hit();
+		}
+		
+		wait(1);
+		if (my.skill1>50 || my.skill1<10){ 
+	if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){break;}}	}
+	}
+	snd_handle=snd_play(snd_player_hit_enemy,50,0);
+	Explo.x=my.x;
+	Explo.y=my.y;
+	Explo.z=my.z+30;
+	Explo.frame=1;
+	snd_handle=snd_play(snd_death_enemy,50,0);
+	wait(1);
+	my.z = -1000;
+	while (PlayerHitTimer>0) {wait(-1);}
+	ent_remove(me); 
 }
 
 
@@ -593,43 +593,43 @@ action EnemyLineY()
 	var starty = my.y;
 	var endy= my.y+my.skill1;
 	var temp[3];
-   set(my,SHADOW|CAST);
-   wait(-1);
-   while(1)
-   {
-   	if (player.y>starty && player.y<endy)
-   	{
-   		my.y=player.y;
-   	}
-     	vec_set(temp,player.x); 
-      vec_sub(temp,my.x);
-      vec_to_angle(my.pan,temp); 
-    	my.tilt=0;
-   	my.roll=0;
-      
+	set(my,SHADOW|CAST);
+	wait(-1);
+	while(1)
+	{
+		if (player.y>starty && player.y<endy)
+		{
+			my.y=player.y;
+		}
+		vec_set(temp,player.x); 
+		vec_sub(temp,my.x);
+		vec_to_angle(my.pan,temp); 
+		my.tilt=0;
+		my.roll=0;
+		
 		my.skill1 += 3*time_step;
-      if (my.skill1 > 100) my.skill1 -= 100; 
-      ent_animate(me,"walk",my.skill1,ANM_CYCLE);
-      
-      if (vec_dist(my.x,player.x)< 90)
-      {
-      	player_hit();
-      }
-      
-      wait(1);
-      if (my.skill1>50 || my.skill1<10){ 
-      if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){break;}}	}
-   }
-   snd_handle=snd_play(snd_player_hit_enemy,50,0);
-    Explo.x=my.x;
-  Explo.y=my.y;
-  Explo.z=my.z+30;
-  Explo.frame=1;
-  snd_handle=snd_play(snd_death_enemy,50,0);
-  wait(1);
-   my.z = -1000;
-  while (PlayerHitTimer>0) {wait(-1);}
-  ent_remove(me); 
+		if (my.skill1 > 100) my.skill1 -= 100; 
+		ent_animate(me,"walk",my.skill1,ANM_CYCLE);
+		
+		if (vec_dist(my.x,player.x)< 90)
+		{
+			player_hit();
+		}
+		
+		wait(1);
+		if (my.skill1>50 || my.skill1<10){ 
+	if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){break;}}	}
+	}
+	snd_handle=snd_play(snd_player_hit_enemy,50,0);
+	Explo.x=my.x;
+	Explo.y=my.y;
+	Explo.z=my.z+30;
+	Explo.frame=1;
+	snd_handle=snd_play(snd_death_enemy,50,0);
+	wait(1);
+	my.z = -1000;
+	while (PlayerHitTimer>0) {wait(-1);}
+	ent_remove(me); 
 }
 
 PANEL* panel_hud =
@@ -637,8 +637,8 @@ PANEL* panel_hud =
 	pos_x = 10;
 	pos_y = 10;
 	digits(20,30, "Life: %.0f", "Arial#20bi", 1, PlayerLife); 
-   digits(20,50, "Health: %.0f", "Arial#20bi", 1, PlayerHealth); 
-   digits(20,70, "Pickups: %.0f", "Arial#20bi", 1, PickUpCount); 
+	digits(20,50, "Health: %.0f", "Arial#20bi", 1, PlayerHealth); 
+	digits(20,70, "Pickups: %.0f", "Arial#20bi", 1, PickUpCount); 
 	flags = SHOW | OUTLINE;
 }
 
@@ -663,48 +663,48 @@ action TVlevel1()
 	camera.fog_start = 1500; 
 	camera.fog_end = 2000;
 	sky_color.red = 0;
-   sky_color.green = 0;
-   sky_color.blue = 0; 
+	sky_color.green = 0;
+	sky_color.blue = 0; 
 }
 
 action LevelBonusPickup1()
 {
 	if (LevelBonusPickups[1] == 1){set(my,TRANSLUCENT); my.alpha=50;}
-		var LDirection=0;
+	var LDirection=0;
 	var LCount=0;
-	 set(my,PASSABLE); 
+	set(my,PASSABLE); 
 	while (player == NULL) 
-  {
-  	wait(1);
-  } 
-  while (vec_dist (player.x, my.x) > 100) 
-  { 
-    if (LDirection==0)
-    {
-    	LCount = LCount +0.1;
-    	my.z=my.z+0.1;
-    	if (LCount>25){LDirection=1;LCount=0;}
-    	
-    }
-    if (LDirection==1)
-    {
-    	LCount = LCount +0.1;
-    	my.z=my.z-0.1;
-    	if (LCount>25){LDirection=0;LCount=0;}	
-    	
-    }
+	{
+		wait(1);
+	} 
+	while (vec_dist (player.x, my.x) > 100) 
+	{ 
+		if (LDirection==0)
+		{
+			LCount = LCount +0.1;
+			my.z=my.z+0.1;
+			if (LCount>25){LDirection=1;LCount=0;}
+			
+		}
+		if (LDirection==1)
+		{
+			LCount = LCount +0.1;
+			my.z=my.z-0.1;
+			if (LCount>25){LDirection=0;LCount=0;}	
+			
+		}
 
-    wait (2);
-  } 
-		LevelBonusPickups[1] = 1;
-	  snd_handle=snd_play(snd_pickup,50,0);
-  Explo.x=my.x;
-  Explo.y=my.y;
-  Explo.z=my.z;
-  Explo.frame=1;
-  
-  wait(1);
-  ent_remove(me); 
+		wait (2);
+	} 
+	LevelBonusPickups[1] = 1;
+	snd_handle=snd_play(snd_pickup,50,0);
+	Explo.x=my.x;
+	Explo.y=my.y;
+	Explo.z=my.z;
+	Explo.frame=1;
+	
+	wait(1);
+	ent_remove(me); 
 }
 
 action LevelPickup1()
@@ -714,41 +714,41 @@ action LevelPickup1()
 	
 	var LDirection=0;
 	var LCount=0;
-	 set(my,PASSABLE); 
+	set(my,PASSABLE); 
 	while (player == NULL) 
-  {
-  	wait(1);
-  } 
-  while (vec_dist (player.x, my.x) > 100) 
-  { 
-    if (LDirection==0)
-    {
-    	LCount = LCount +0.1;
-    	my.z=my.z+0.1;
-    	if (LCount>25){LDirection=1;LCount=0;}
-    	
-    }
-    if (LDirection==1)
-    {
-    	LCount = LCount +0.1;
-    	my.z=my.z-0.1;
-    	if (LCount>25){LDirection=0;LCount=0;}	
-    	
-    }
+	{
+		wait(1);
+	} 
+	while (vec_dist (player.x, my.x) > 100) 
+	{ 
+		if (LDirection==0)
+		{
+			LCount = LCount +0.1;
+			my.z=my.z+0.1;
+			if (LCount>25){LDirection=1;LCount=0;}
+			
+		}
+		if (LDirection==1)
+		{
+			LCount = LCount +0.1;
+			my.z=my.z-0.1;
+			if (LCount>25){LDirection=0;LCount=0;}	
+			
+		}
 
-    wait (2);
-  } 
+		wait (2);
+	} 
 	LevelPickups[0] = 1;
 	if (PickUpCount==56){LevelBonusPickups[0]=1;}
 	
-	  snd_handle=snd_play(snd_pickup,50,0);
+	snd_handle=snd_play(snd_pickup,50,0);
 
-  Explo.x=my.x;
-  Explo.y=my.y;
-  Explo.z=my.z;
-  Explo.frame=1;
-  
-  
+	Explo.x=my.x;
+	Explo.y=my.y;
+	Explo.z=my.z;
+	Explo.frame=1;
+	
+	
 	fade_in();
 	
 	wait(-2);
@@ -767,8 +767,8 @@ action LevelPickup1()
 	camera.fog_start = 1500; 
 	camera.fog_end = 2000;
 	sky_color.red = 0;
-   sky_color.green = 0;
-   sky_color.blue = 0; 
+	sky_color.green = 0;
+	sky_color.blue = 0; 
 }
 
 action LevelPickup2()
@@ -777,41 +777,41 @@ action LevelPickup2()
 	if (LevelPickups[1] == 1){set(my,TRANSLUCENT); my.alpha=50;}
 	var LDirection=0;
 	var LCount=0;
-	 set(my,PASSABLE); 
+	set(my,PASSABLE); 
 	while (player == NULL) 
-  {
-  	wait(1);
-  } 
-  while (vec_dist (player.x, my.x) > 100) 
-  { 
-    if (LDirection==0)
-    {
-    	LCount = LCount +0.1;
-    	my.z=my.z+0.1;
-    	if (LCount>25){LDirection=1;LCount=0;}
-    	
-    }
-    if (LDirection==1)
-    {
-    	LCount = LCount +0.1;
-    	my.z=my.z-0.1;
-    	if (LCount>25){LDirection=0;LCount=0;}	
-    	
-    }
+	{
+		wait(1);
+	} 
+	while (vec_dist (player.x, my.x) > 100) 
+	{ 
+		if (LDirection==0)
+		{
+			LCount = LCount +0.1;
+			my.z=my.z+0.1;
+			if (LCount>25){LDirection=1;LCount=0;}
+			
+		}
+		if (LDirection==1)
+		{
+			LCount = LCount +0.1;
+			my.z=my.z-0.1;
+			if (LCount>25){LDirection=0;LCount=0;}	
+			
+		}
 
-    wait (2);
-  } 
+		wait (2);
+	} 
 	LevelPickups[1] = 1;
 	
-				if (PickUpCount==56){LevelBonusPickups[0]=1;}
-				
-					  snd_handle=snd_play(snd_pickup,50,0);
+	if (PickUpCount==56){LevelBonusPickups[0]=1;}
+	
+	snd_handle=snd_play(snd_pickup,50,0);
 
-  Explo.x=my.x;
-  Explo.y=my.y;
-  Explo.z=my.z;
-  Explo.frame=1;
-  
+	Explo.x=my.x;
+	Explo.y=my.y;
+	Explo.z=my.z;
+	Explo.frame=1;
+	
 	fade_in();
 	
 	wait(-2);
@@ -830,6 +830,6 @@ action LevelPickup2()
 	camera.fog_start = 1500; 
 	camera.fog_end = 2000;
 	sky_color.red = 0;
-   sky_color.green = 0;
-   sky_color.blue = 0; 
+	sky_color.green = 0;
+	sky_color.blue = 0; 
 }
