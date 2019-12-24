@@ -36,8 +36,8 @@ function ShowLevelPickups()
 	if (LevelPickups[0]==1){ent_create ("red.bmp", vector(832,-93,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-93,355), NULL); }
 	if (LevelPickups[1]==1){ent_create ("red.bmp", vector(832,-186,355), NULL); }else{ent_create ("redblank.bmp", vector(832,-186,355), NULL); }
 	
-	if (LevelBonusPickups[0]==1){ent_create ("wite.bmp", vector(832,-93,451), NULL); }else{ent_create ("whiteBlank.bmp", vector(832,-93,451), NULL); }
-	if (LevelBonusPickups[1]==1){ent_create ("wite.bmp", vector(832,-186,451), NULL); }else{ent_create ("whiteBlank.bmp", vector(832,-186,451), NULL); }
+	if (LevelBonusPickups[0]==1){ent_create ("wite.bmp", vector(832,-93,451), NULL); }else{ent_create ("whiteblank.bmp", vector(832,-93,451), NULL); }
+	if (LevelBonusPickups[1]==1){ent_create ("wite.bmp", vector(832,-186,451), NULL); }else{ent_create ("whiteblank.bmp", vector(832,-186,451), NULL); }
 }
 
 
