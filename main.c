@@ -83,24 +83,40 @@ action BonusCoin()
 
 function fade_out()
 {
+	media_tune(FMusic,1,0,0);
 	panel_black.alpha = 100;
+		var i=1;
+		while (i<50)
+	{
 	while (panel_black.alpha >1)
 	{
-		panel_black.alpha -= 4*time_step; 
-		wait(1);
+		panel_black.alpha -= 8*time_step; 
+		if (i<=50)
+		media_tune(FMusic,i,0,0);
+	   i=i+0.2;
+		wait(2);
 	}
-	panel_black.alpha = 0;
+	panel_black.alpha = 0;	
+	}
 }
 
 function fade_in()
 {
 	panel_black.alpha = 0;
+	var i=50;
+	while (i>1)
+	{
 	while (panel_black.alpha <100)
 	{
-		panel_black.alpha += 4*time_step; 
-		wait(1);
+		panel_black.alpha += 8*time_step; 
+		if (i>1)
+		media_tune(FMusic,i,0,0);
+		i=i-0.2;
+		wait(2);
 	}
 	panel_black.alpha = 100;
+		
+	}
 }
 
 ENTITY* ent_sky;
@@ -114,7 +130,7 @@ function player_death()
 
 function main(){
 	camera.clip_near = 0;
-	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.3");	
+	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.4");	
 	//	video_switch(12,0,2);
 	video_screen = 0;
 	video_mode = 12;
@@ -649,7 +665,6 @@ action TVlevel1()
 		wait(-1);
 		if (vec_dist(my.x,player.x)<=150){break;	}
 	}
-	
 	fade_in();
 	
 	wait(-2);
@@ -657,6 +672,10 @@ action TVlevel1()
 	level_load("l1.wmb");
 	fade_out();
 	PickUpCount = 0;
+	
+	
+	
+	
 	media_stop(FMusic);	
 	FMusic =	media_loop("Day_of_Chaos.mp3",NULL,50);
 	fog_color = 1; 
