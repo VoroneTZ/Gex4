@@ -1,4 +1,5 @@
 #include "animation.c"
+#include "main.c"
 function npc_movement(var* pathDist){
 	VECTOR vDir;
 	VECTOR newPosition;
@@ -64,11 +65,19 @@ action npc_action(){
 	set(my,SHADOW|CAST);
 	
 	while(my.hp>0) {
+		
+	
+		
 		if(!npc_talk())
 			my.CurrentAction = ActionIdle;
 			npc_movement(pathDist);
 		handle_animation();
-		if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){my.hp -=1; wait(1);}}	
+		if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){my.hp -=1; wait(1);}else {
+				if (vec_dist(my.x,player.x)< 90)
+		{
+			player_hit();
+		}
+		}}
 		wait(1);
 	}
 	my.skill1=0;
@@ -85,5 +94,7 @@ snd_handle1=snd_play(snd_death_enemy,50,0);
   Explo.y=my.y;
   Explo.z=my.z+30;
   Explo.frame=1;
+  	my.z = -1000;
+  while (PlayerHitTimer>0) {wait(-1);}
   ent_remove(me); 
 }
