@@ -128,7 +128,7 @@ function fade_in()
 		wait(2);
 	}
 	panel_black.alpha = 100;
-		
+	i=i-0.2;	
 	}
 }
 
@@ -143,7 +143,7 @@ function player_death()
 
 function main(){
 	camera.clip_near = 0;
-	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.4");	
+	video_window(vector(0,0,0),vector(0,0,0),0,"Return Of The Gecko v0.0.3");	
 	//	video_switch(12,0,2);
 	video_screen = 0;
 	video_mode = 12;

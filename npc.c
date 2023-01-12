@@ -5,10 +5,27 @@ function npc_movement(var* pathDist){
 	VECTOR newPosition;
 	var npcDisplacement = walkSpeed * time_step;
 	//Calculate new position
-
-	path_spline(me,newPosition,*pathDist);
-	newPosition.z = my.z;	// Adjust the height of the direction vector
-	*pathDist += npcDisplacement;
+	if (is(my,FLAG1))
+	{
+	if (vec_dist(my.x,player.x)>my.skill1)
+		{
+		path_spline(me,newPosition,*pathDist);
+		newPosition.z = my.z;	// Adjust the height of the direction vector
+		*pathDist += npcDisplacement;
+		}
+		else
+		{
+			newPosition.x=player.x;
+			newPosition.y=player.y;
+			newPosition.z=player.z;
+		}
+	}
+	else
+	{
+		path_spline(me,newPosition,*pathDist);
+		newPosition.z = my.z;	// Adjust the height of the direction vector
+		*pathDist += npcDisplacement;
+	}
 	//Get direction (remove tilt)
 	vec_diff(vDir,newPosition,my.x);
 	vec_to_angle(me.pan,vDir);
@@ -72,12 +89,18 @@ action npc_action(){
 			my.CurrentAction = ActionIdle;
 			npc_movement(pathDist);
 		handle_animation();
-		if (vec_dist(my.x,player.x)<100){if (player.IsAttack==1){my.hp -=1; wait(1);}else {
+		if (vec_dist(my.x,player.x)<100)
+		{
+			if (player.IsAttack==1)
+				{my.hp -=1; wait(1);}
+			else 
+		{
 				if (vec_dist(my.x,player.x)< 90)
 		{
 			player_hit();
 		}
-		}}
+		}
+		}
 		wait(1);
 	}
 	my.skill1=0;
